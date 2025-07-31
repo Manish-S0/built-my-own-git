@@ -1,0 +1,13 @@
+{
+  "name": "git-from-scratch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    
+    "dev":"node app/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
