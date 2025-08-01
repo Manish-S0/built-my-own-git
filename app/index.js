@@ -1,12 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 
-const client=require('./gitClient')
-const gitClient=new client();
+
 
 //importing commands
 
 const {AddCommand}=require('./command/addCommand')
+const {CatFileCommand}=require('./command/cat-file')
+
+const client=require('./gitClient')
+const gitClient=new client();
 
 // Get command from CLI
 const command = process.argv[2];
@@ -21,7 +24,9 @@ switch (command) {
     handleAddCommand();
     break;
 
-
+  case "cat-file":
+    handleCatFileCommand();
+    break;
 
   default:
     throw new Error(`Unknown command ${command}`);
@@ -41,4 +46,12 @@ function handleAddCommand() {
   const command=new AddCommand(filepath);
   gitClient.run(command);
 
+}
+
+function handleCatFileCommand(){
+  const flag=process.argv[3];
+  const commitSHA=process.argv[4];
+
+  const command=new CatFileCommand(flag,commitSHA);
+  gitClient.run(command)
 }
