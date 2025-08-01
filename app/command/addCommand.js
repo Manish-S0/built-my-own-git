@@ -28,9 +28,12 @@ class AddCommand {
           return;                              // Stop execution for invalid file
         }
 
-        const content = fs.readFileSync(filePath, 'utf8'); // Read file content as string
+        const content = fs.readFileSync(filePath); // Read file content as string
 
-        const fileHash = hashContent(content);             // Create a SHA-1 hash of file content
+        const header=`blob ${content.length}\0`
+        const fullContent=Buffer.concat([Buffer.from(header),content]);
+
+        const fileHash = hashContent(fullContent);             // Create a SHA-1 hash of file content
 
         const gitDir = path.resolve('.mygit');             // Path to `.mygit` directory
         if (!fs.existsSync(gitDir)) {

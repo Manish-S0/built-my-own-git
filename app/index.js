@@ -7,6 +7,7 @@ const path = require("path");
 
 const {AddCommand}=require('./command/addCommand')
 const {CatFileCommand}=require('./command/cat-file')
+const {HashObjectCommand}=require('./command/hash-object')
 
 const client=require('./gitClient')
 const gitClient=new client();
@@ -26,6 +27,10 @@ switch (command) {
 
   case "cat-file":
     handleCatFileCommand();
+    break;
+
+  case "hash-object":
+    handleHashObject();
     break;
 
   default:
@@ -54,4 +59,16 @@ function handleCatFileCommand(){
 
   const command=new CatFileCommand(flag,commitSHA);
   gitClient.run(command)
+}
+
+function handleHashObject(){
+  let flag=process.argv[3];
+  let filepath=process.argv[4];
+
+  if (!filepath){
+    filepath=flag;
+    flag=null;
+  }
+  const command=new HashObjectCommand(flag,filepath);
+  gitClient.run(command);
 }
