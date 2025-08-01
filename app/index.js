@@ -1,6 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 
+const client=require('./gitClient')
+const gitClient=new client();
+
+//importing commands
+
+const {AddCommand}=require('./command/addCommand')
+
 // Get command from CLI
 const command = process.argv[2];
 
@@ -10,11 +17,11 @@ switch (command) {
     createGitDirectory();
     break;
 
-    case "add":
-      handleAddCommand();
-      break;
+  case "add":
+    handleAddCommand();
+    break;
 
-    
+
 
   default:
     throw new Error(`Unknown command ${command}`);
@@ -22,14 +29,16 @@ switch (command) {
 
 // Create git directory
 function createGitDirectory() {
-  fs.mkdirSync(path.join(process.cwd(), ".mygit"),{ recursive: true });      // { recursive: true } create intermediate parent if they dont exist
+  fs.mkdirSync(path.join(process.cwd(), ".mygit"), { recursive: true });      // { recursive: true } create intermediate parent if they dont exist
   fs.mkdirSync(path.join(process.cwd(), ".mygit", "objects"), { recursive: true });
   fs.mkdirSync(path.join(process.cwd(), ".mygit", "refs"), { recursive: true });
   fs.writeFileSync(path.join(process.cwd(), ".mygit", "HEAD"), "ref: refs/heads/main\n");
   console.log("Initialized git directory");
 }
 
-function handleAddCommand(){
-  const filename =process.argv[3];
-  
+function handleAddCommand() {
+  const filepath = process.argv[3];
+  const command=new AddCommand(filepath);
+  gitClient.run(command);
+
 }
